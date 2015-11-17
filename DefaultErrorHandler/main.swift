@@ -12,8 +12,8 @@ import Foundation
 func readFile() {
     let errorHandler = ErrorHandler()
     
-    let file = errorHandler.wrap {
-        try NSString(contentsOfFile: "doesNotExist", encoding: NSUTF8StringEncoding)
+    let fileContent = errorHandler.wrap {
+        return try NSString(contentsOfFile: "doesNotExist", encoding: NSUTF8StringEncoding)
     }
 
     print(file)
