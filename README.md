@@ -29,7 +29,7 @@ Depending on the complexity of your app, there might be hundreds of such operati
 
 Can we strike a balance between convenience and due diligence? **I believe so**. In my latest side project I implemented a default error handler that deals with errors that, for one reason or another, don't deserve a custom error handler. 
 
-This error handler doesn't swallow the error completely. Instead, it logs the errors using my analytics service. This behavior is useful for any type of error that might occur in my app. It's the largest common denominator of error handling.
+This error handler doesn't swallow the error completely. Instead, it logs the errors using my analytics service. This behavior is useful for any type of error that might occur in my app. It's the greatest common denominator of error handling.
 
 This is what using the API looks like:
 
