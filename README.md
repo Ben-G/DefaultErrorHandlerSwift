@@ -7,12 +7,19 @@ Swift 2 introduced an error handling mechanism that includes [backwards compatib
 
 #Does Every Error Deserve an Individual Catch?
 
-Swift will require you to provide an error handler when you call a method that `throws`, unless you resort to the `try!` operator, as in the following example:
+Swift will require you to provide an error handler when you call a method that `throws`, unless you resort to the `try?` or `try!` operator. Here's an example of `try!`:
 
 ```
 try! NSString(contentsOfFile: "doesNotExist", encoding: NSUTF8StringEncoding)
 ```
 Using this unfaithful approach an unexpectedly occurring error will crash your app. Using `try!`, just as using forcefully unwrapped optionals, should be avoided in almost all cases.
+
+Alternatively you can use `try?`, which will transform the result of the operation you are performing into an optional. A successful operation will yield a value, a failed operation will yield `nil`:
+
+```
+let data = try? NSString(contentsOfFile: "doesNotExist", encoding: NSUTF8StringEncoding)
+```
+With this approach all details of an error that ocurred will be swallowed entirely which is suboptimal in many cases as well.
 
 **But is it worth it writing a custom error handler for every error producing function you call? I don't think so.**
 
