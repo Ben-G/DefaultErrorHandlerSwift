@@ -1,9 +1,9 @@
-#Implementing a Default Error Handler in Swift
+#Convenient Error Handling in Swift
 
 
 Swift 2 introduced an error handling mechanism that includes [backwards compatibility with Objective-C](link to my post).
 
-**This is great news - at the same time the new mechanism is a lot stricter.** Long gone are the days in which one could ignore errors by lavishly throwing `nil` at methods that expect a pointer to an `NSError` variable.
+**This is great news, the new mechanism is a lot stricter.** Long gone are the days in which one could ignore errors by lavishly throwing `nil` at methods that expect a pointer to an `NSError` variable.
 
 #Does Every Error Deserve an Individual Catch?
 
@@ -12,7 +12,7 @@ Swift will require you to provide an error handler when you call a method that `
 ```
 try! NSString(contentsOfFile: "doesNotExist", encoding: NSUTF8StringEncoding)
 ```
-Using this unfaithful approach an unexpectedly occurring error will crash your app. Thus, using `try!`, just as using forcefully unwrapped optionals, should be avoided in almost all cases.
+Using this unfaithful approach an unexpectedly occurring error will crash your app. Using `try!`, just as using forcefully unwrapped optionals, should be avoided in almost all cases.
 
 **But is it worth it writing a custom error handler for every error producing function you call? I don't think so.**
 
@@ -27,7 +27,7 @@ Depending on the complexity of your app, there might be hundreds of such operati
 
 #A Good Compromise?
 
-Can we strike a balance between convenience and due diligence? **I believe so**. In my latest side project I implemented a default error handler that deals with errors that, for one reason or another, don't deserve a custom error handler. 
+Can we strike a balance between convenience and due diligence? I believe so. In my latest side project I implemented a default error handler that deals with errors that, for one reason or another, don't deserve a custom error handler. 
 
 This error handler doesn't swallow the error completely. Instead, it logs the errors using my analytics service. This behavior is useful for any type of error that might occur in my app. It's the largest common denominator of error handling.
 
@@ -47,7 +47,7 @@ Here are the main characteristics:
 - If the closure returns a value, then `errorHandler.wrap` will pass it through to its caller
 - `errorHandler.wrap` always returns an optional type, indicating that the wrapped operation might fail and return `nil`
 
-In the above example the `fileContent` variable has a type of `String?`.  We can use this variable in subsequent operations. While we need to check if the optional contains a value before using it, we can ignore the details of a potential error that was thrown.
+In the above example the `fileContent` variable has a type of `String?`.  We can use this variable in subsequent operations. While we need to check if the optional contains a value before using it, we can ignore the details of a potential error that was thrown. In this case `errorHandler.wrap` acts as a glorified version of `try?`.
 
 In most cases I use the default error handler when calling functions without a return value. In these cases the value of the error handler becomes more obvious:
 
@@ -59,7 +59,7 @@ errorHandler.wrap {
 	try cache.storeImage(image)
 }
 ```
-I can perform a failable operation without writing any code that deals with errors or optional return values.
+We can perform a failable operation without writing any code that deals with errors or optional return values, while still capturing details about errors that might occurr.
 
 #Implementation of the Default Error Handler
 
@@ -91,13 +91,15 @@ The `logError` function should be customized to your needs - as an example I am 
 
 #Conclusion
 
-When it comes to error handling in Swift it is just too tempting for me to use `try!` or an empty `catch` block in conjunction with a `//FIXME:` comment when I'm working on a tangential feature of a fairly new project. 
-
 Good error handling is incredibly important for a good user experience - I wanted to make the process as easy as possible. Now my analytics dashboard will inform me about any unhandled error that occurs in production. Going from there I can improve error handling in my apps by adding custom handlers for the most frequent errors.
 
-You can find the Source Code for this blog post [on GitHub](...). If your approach to error handling is different, I would love to hear from you!
+I definitely encourage you and myself to handle as many errors as sensible individually - but I believe there's a large number of potential errors that are suitable for this generic error handling scheme.
+
+You can find the Source Code for this blog post [on GitHub](https://github.com/Ben-G/DefaultErrorHandlerSwift). 
+
+How do you tackle error handling? I would love to hear from you!
 
 ##Acknowledgements
 
-- Thanks to `Result.materialize` for inspiring my `wrap` function
-- Thanks to xyz for reading drafts of this post
+- Thanks to [`Result.materialize`](https://github.com/antitypical/Result/blob/master/Result/Result.swift#L153-L159) for inspiring my `wrap` function
+- Thanks to [morganchen96](https://twitter.com/morganchen96) for providing feedback on a draft of this post

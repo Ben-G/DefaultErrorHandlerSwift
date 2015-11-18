@@ -8,6 +8,9 @@
 
 import Foundation
 
+func doThing() throws {
+    
+}
 
 func readFile() {
     let errorHandler = ErrorHandler()
@@ -15,10 +18,14 @@ func readFile() {
     let fileContent = errorHandler.wrap {
         return try NSString(contentsOfFile: "doesNotExist", encoding: NSUTF8StringEncoding)
     }
-
+    
+    let a = try? doThing()
+    
     print(file)
 }
 
 
 
 readFile()
+
+
