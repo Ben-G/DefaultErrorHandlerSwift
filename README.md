@@ -59,7 +59,7 @@ errorHandler.wrap {
 	try cache.storeImage(image)
 }
 ```
-We can perform a failable operation without writing any code that deals with errors or optional return values, while still capturing details about errors that might occurr.
+We can perform a failable operation without writing any code that deals with errors or optional return values, while still capturing details about errors that might occur.
 
 #Implementation of the Default Error Handler
 
