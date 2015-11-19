@@ -12,25 +12,27 @@ Swift will require you to provide an error handler when you call a method that `
 ```
 try! NSString(contentsOfFile: "doesNotExist", encoding: NSUTF8StringEncoding)
 ```
-Using this unfaithful approach an unexpectedly occurring error will crash your app. Using `try!`, just as using forcefully unwrapped optionals, should be avoided in almost all cases.
+Using this unfaithful approach an unexpectedly occurring error will cause a crash. You should only use `try!` if your app cannot continue to work sensibly if the attempted operation fails - i.e. if you fail load the database model for your application from disk.
 
 Alternatively you can use `try?`, which will transform the result of the operation you are performing into an optional. A successful operation will yield a value, a failed operation will yield `nil`:
 
 ```
 let data = try? NSString(contentsOfFile: "doesNotExist", encoding: NSUTF8StringEncoding)
 ```
-With this approach all details of an error that ocurred will be swallowed entirely which is suboptimal in many cases as well.
+With this approach all details of an error that occurred will be swallowed entirely which is suboptimal in many cases as well.
 
 **But is it worth it writing a custom error handler for every error producing function you call? I don't think so.**
 
 Many kinds of errors deserve your full attention, you can write code to recover from them or, at the very least, notify the user about unexpected behavior with a meaningful error message. 
 
-Other errors are less important. You cannot recover from them with reasonable effort and they don't affect the user experience. The user will not want to be informed about them. Here are examples of errors that, in my opinion, fall into this category:
+Other errors are less suitable for custom error handlers. You cannot recover from them with reasonable effort and they don't affect the user experience. The user will not want to be informed about them. Here are examples of errors that, in my opinion, fall into this category:
 
 - Caching a downloaded image on disk fails
 - Your app cannot connect to the ad service you are using
 
-Depending on the complexity of your app, there might be hundreds of such operations. How can you avoid writing a custom error handlers for each of them without resorting to `try!`?
+Depending on the complexity of your app, there might be hundreds of such operations. 
+
+Even though you can't recover from these errors, you should definitely keep track of them through some sort of logging mechanism! How can this be done without writing many individual error handlers?
 
 #A Good Compromise?
 
@@ -109,4 +111,4 @@ How do you tackle error handling? I would love to hear from you!
 ##Acknowledgements
 
 - Thanks to [`Result.materialize`](https://github.com/antitypical/Result/blob/master/Result/Result.swift#L153-L159) for inspiring my `wrap` function
-- Thanks to [morganchen96](https://twitter.com/morganchen96) for providing feedback on a draft of this post
+- Thanks to [morganchen96](https://twitter.com/morganchen96) and [javi](https://twitter.com/Javi) for providing feedback on drafts of this post
